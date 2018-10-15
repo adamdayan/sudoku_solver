@@ -69,3 +69,19 @@ void display_board(const char board[9][9]) {
 }
 
 /* add your functions here */
+
+/* function to check whether a sudoku board has all positions occupied with digits */
+bool is_complete(char board[9][9])
+{
+  for (int row = 0; row < 8; row++)
+    {
+      for (int col = 0; col < 8; col++)
+	{
+	  if ((board[row][col] > 57 || board[row][col] < 48))
+	    return false;
+	}
+    }
+  return true;
+}
+
+  
