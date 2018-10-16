@@ -118,7 +118,7 @@ bool in_bounds(int row, int column)
 }
 
 /* function to check whether a move is legal; if so it will write that move to the board */ 
-bool make_move(char position[3], char digit, char board[9][9])
+bool make_move(const char* position, char digit, char board[9][9])
 {
   int row, col;
 
@@ -134,4 +134,26 @@ bool make_move(char position[3], char digit, char board[9][9])
     return false;
 }
   
+/* function that writes a board array to a data file. returns true if write succesful otherwise returns false */
+bool save_board(const char* filename, char board[9][9])
+{
+  ofstream ostream;
+
+  ostream.open(filename);
+
+  for (int row = 0; row < 9; row++)
+    {
+      for (int col = 0; col < 9; col++)
+	{
+	  if (ostream.is_open())
+	    ostream << board[row][col];
+	  else
+	    return false;
+	}
+      ostream << endl; 
+    }
+
+  ostream.close(); 
   
+  return true;
+}
