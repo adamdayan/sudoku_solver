@@ -13,6 +13,9 @@ bool check_column(char digit, int column, char board[9][9]);
 /* function to check whether a digit already exists in a given row. returns boolean */
 bool check_row(char digit, int row, char board[9][9]);
 
+/* function to check whether a digit already exists in a square frame */
+bool check_frame(char digit, int row, int col, char board[9][9]); 
+
 /* function to check whether given coordinates are in bounds */
 bool in_bounds(int row, int column);
 

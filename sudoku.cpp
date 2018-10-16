@@ -108,6 +108,26 @@ bool check_row(char digit, int row, char board[9][9])
   return true;
 }
 
+/* function to check whether a digit already exists in a square frame */
+bool check_frame(char digit, int row, int col, char board[9][9])
+{
+  int row_lower_bound = (row / 3) * 3;
+  int row_upper_bound = row_lower_bound + 2;
+  int col_lower_bound = (col / 3) * 3;
+  int col_upper_bound = col_lower_bound + 2;
+
+  for (int row_count = row_lower_bound; row_count <= row_upper_bound; row_count++)
+    {
+      for (int col_count = col_lower_bound; col_count <= col_upper_bound; col_count++)
+	{
+	  if (digit == board[row_count][col_count])
+	    return false;
+	}
+    }
+
+  return true;
+}
+
 /* function to check whether given coordinates are in bounds */
 bool in_bounds(int row, int column)
 {
@@ -125,7 +145,10 @@ bool make_move(const char* position, char digit, char board[9][9])
   row = position[0] - 'A';
   col = position[1] - 49; //-48 changes char to digit; -1 changes it to an index
 
-  if (check_column(digit, col, board) && check_row(digit, row, board) && in_bounds(row, col))
+  if (check_column(digit, col, board)
+      && check_row(digit, row, board)
+      && in_bounds(row, col)
+      && check_frame(digit, row, col, board))
     {
       board[row][col] = digit;
       return true;
