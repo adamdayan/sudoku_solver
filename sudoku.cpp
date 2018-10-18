@@ -48,22 +48,20 @@ void print_frame(int row) {
 
 /* internal helper function */
 void print_row(const char* data, int row) {
-  cout << (char) ('A' + row) << " ";
+  printw("%c ", (char) ('A' + row));
   for (int i=0; i<9; i++) {
-    printw((i % 3) ? ":" : "|");
-    printw(" "); 
-    printw((data[i]==".") ? " " : data[i]);
-    printw(" ");
+    printw("%c ", (i % 3) ? ':' : '|'); 
+    printw("%c ", (data[i]=='.') ? ' ' : data[i]);
   }
   printw("|\n");
 }
 
 /* pre-supplied function to display a Sudoku board */
 void display_board(const char board[9][9]) {
-  cout << "    ";
+  printw("    ");
   for (int r=0; r<9; r++) 
     {
-      printw((char) ('1'+r));
+      printw("%c", (char) ('1'+r));
       printw("   ");
     }
   printw("\n");
