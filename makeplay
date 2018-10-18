@@ -1,0 +1,8 @@
+playground: playground.o sudoku.o
+	    g++ -Wall -g playground.o sudoku.o -o playground
+
+playground.o: playground.cpp sudoku.h
+	      g++ -Wall -g -c playground.cpp -o playground.o
+
+sudoku.o: sudoku.cpp sudoku.h
+	  g++ -Wall -g -c sudoku.cpp -o sudoku.o
