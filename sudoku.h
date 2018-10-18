@@ -25,4 +25,7 @@ bool make_move(const char* position, char digit, char board[9][9]);
 /* function that writes a board array to a data file. returns true if write successful otherwise returns false */ 
 bool save_board(const char* filename, char board[9][9]); 
 
+/* function that solves the sudoku board through an 'informed brute-force' strategy. returns true if board is soluble, false otherwise */
+bool solve_board(char board[9][9]);
+
 #endif

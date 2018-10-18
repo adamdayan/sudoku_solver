@@ -73,9 +73,9 @@ void display_board(const char board[9][9]) {
 /* function to check whether a sudoku board has all positions occupied with digits */
 bool is_complete(char board[9][9])
 {
-  for (int row = 0; row < 8; row++)
+  for (int row = 0; row < 9; row++)
     {
-      for (int col = 0; col < 8; col++)
+      for (int col = 0; col < 9; col++)
 	{
 	  if ((board[row][col] > 57 || board[row][col] < 48))
 	    return false;
@@ -137,7 +137,7 @@ bool in_bounds(int row, int column)
     return false;
 }
 
-/* function to check whether a move is legal; if so it will write that move to the board */ 
+/* overloaded function to check whether a move is legal using position-to-write-to and digit-to-write; if so it will write that move to the board */ 
 bool make_move(const char* position, char digit, char board[9][9])
 {
   int row, col;
@@ -156,6 +156,23 @@ bool make_move(const char* position, char digit, char board[9][9])
   else
     return false;
 }
+
+/* overloaded function to check whether a move is legal using indicies-to-write-to and digit-to-write; if so it will write that move to the board */ 
+bool make_move(int row, int col, int value, char board[9][9])
+{
+  char digit = static_cast<char>(value) + '0'; 
+  if (check_column(digit, col, board)
+      && check_row(digit, row, board)
+      && in_bounds(row, col)
+      && check_frame(digit, row, col, board))
+    {
+      board[row][col] = digit;
+      return true;
+    }
+  else
+    return false;
+}
+
   
 /* function that writes a board array to a data file. returns true if write succesful otherwise returns false */
 bool save_board(const char* filename, char board[9][9])
@@ -179,4 +196,44 @@ bool save_board(const char* filename, char board[9][9])
   ostream.close(); 
   
   return true;
+}
+
+/* function that solves the sudoku board through an 'informed brute-force' strategy. returns true if board is soluble, false otherwise */
+bool solve_board(char board[9][9])
+{
+  for (int row = 0; row < 9; row++)
+    {
+      for (int col = 0; col < 9; col++)
+	{ 
+	  if (board[row][col] == '.')
+	    {
+	      for (int working_num = 1; working_num <= 9; working_num++)
+		{
+		  bool move_result = make_move(row, col, working_num, board); 
+		  
+		  if (is_complete(board))
+		    { 
+		      return true;
+		    }
+		  else if (move_result)
+		    {
+		      if (!solve_board(board) && working_num == 9)
+			{
+			  board[row][col] = '.';
+			  return false; 
+			}
+		      else if (is_complete(board))
+			return true; 
+		    }
+		  else if (working_num < 9)
+		    continue;
+		  else
+		    {
+		      board[row][col] = '.';
+		      return false; 
+		    }
+		}
+	    }
+	}
+    }
 }
