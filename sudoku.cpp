@@ -201,6 +201,7 @@ bool save_board(const char* filename, char board[9][9])
 /* function that solves the sudoku board through an 'informed brute-force' strategy. returns true if board is soluble, false otherwise */
 bool solve_board(char board[9][9])
 {
+  function_call_cnt++; 
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
@@ -209,6 +210,7 @@ bool solve_board(char board[9][9])
 	    {
 	      for (int working_num = 1; working_num <= 9; working_num++)
 		{
+		  guess_cnt++;
 		  bool move_result = make_move(row, col, working_num, board); 
 		  
 		  if (is_complete(board))
