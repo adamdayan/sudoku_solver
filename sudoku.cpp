@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cassert>
+#include <ncurses.h>
 #include "sudoku.h"
 
 using namespace std;
@@ -40,32 +41,38 @@ void load_board(const char* filename, char board[9][9]) {
 /* internal helper function */
 void print_frame(int row) {
   if (!(row % 3))
-    cout << "  +===========+===========+===========+" << endl;
+    printw("  +===========+===========+===========+\n");
   else
-    cout << "  +---+---+---+---+---+---+---+---+---+" << endl;
+    printw("  +---+---+---+---+---+---+---+---+---+\n");
 }
 
 /* internal helper function */
 void print_row(const char* data, int row) {
   cout << (char) ('A' + row) << " ";
   for (int i=0; i<9; i++) {
-    cout << ( (i % 3) ? ':' : '|' ) << " ";
-    cout << ( (data[i]=='.') ? ' ' : data[i]) << " ";
+    printw((i % 3) ? ":" : "|");
+    printw(" "); 
+    printw((data[i]==".") ? " " : data[i]);
+    printw(" ");
   }
-  cout << "|" << endl;
+  printw("|\n");
 }
 
 /* pre-supplied function to display a Sudoku board */
 void display_board(const char board[9][9]) {
   cout << "    ";
   for (int r=0; r<9; r++) 
-    cout << (char) ('1'+r) << "   ";
-  cout << endl;
+    {
+      printw((char) ('1'+r));
+      printw("   ");
+    }
+  printw("\n");
   for (int r=0; r<9; r++) {
     print_frame(r);
     print_row(board[r],r);
   }
   print_frame(9);
+  refresh(); 
 }
 
 /* add your functions here */
@@ -212,7 +219,7 @@ bool solve_board(char board[9][9])
 		{
 		  guess_cnt++;
 		  bool move_result = make_move(row, col, working_num, board); 
-		  
+		  display_board(board); 
 		  if (is_complete(board))
 		    { 
 		      return true;

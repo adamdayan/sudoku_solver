@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdio>
+#include <ncurses.h>
 #include"sudoku.h"
 
 int function_call_cnt = 0;
@@ -11,19 +12,24 @@ int main()
 {
   char board[9][9];
 
+  initscr(); 
+  
   load_board("mystery3.dat", board);
   display_board(board);
 
   if (solve_board(board))
-    cout << "board solved" << endl;
+    {
+      printw("board solved\n");
+    }
   else
-    cout << "board not solved" << endl;
+    {
+      printw("board not solved\n");
+    }
 
-  cout << function_call_cnt << " function calls\n"
-       << guess_cnt << " guesses\n"; 
-  
-  display_board(board); 
-  
+  refresh();
+  getch();
+
+  endwin(); 
   return 0;
 }
 
