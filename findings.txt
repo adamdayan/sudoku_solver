@@ -1,1 +1,17 @@
 Summarise your findings here (see specification).
+
+
+My initial implementation of the backtrack algorithim finds
+that mystery1 is substantially harder to solve than mystery3. Mystery1
+took 421546 calls to the 'solve_board()' function as compared to a
+mere 14133 for mystery3. Mystery2 is insoluble.
+
+However, the finding that mystery1 is harder than mystery3 is a consequence of some relatively arbitrary features of
+my algorithim. If I alter 'solve_board()' to first guess 9 (rather than
+1) and decrement (rather than increment) the mystery1 requires 16453
+function calls and mystery3 requires 16459. This suggests that the
+'hardness' wasn't a feature of the puzzle but rather of my solution.
+Incrementing guesses from 1 will be highly ineffective when dealing
+with a small subset of all boards that contain high numbers in
+top-left-hand corner squares, particularly if these squares have few
+given peers.  

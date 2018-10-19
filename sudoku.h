@@ -3,7 +3,9 @@
 
 extern int function_call_cnt; 
 
-void load_board(const char* filename, char board[9][9]);
+/* function to load board. default is to print statements on status of read but this can be specified */ 
+void load_board(const char* filename, char board[9][9], bool = true);
+
 void display_board(const char board[9][9]); 
 
 /* Function that checks whether all fields on a sudoku board are occupied by digits */ 

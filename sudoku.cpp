@@ -11,12 +11,13 @@ using namespace std;
    function definitions to the end of this file. */
 
 /* pre-supplied function to load a Sudoku board from a file */
-void load_board(const char* filename, char board[9][9]) {
+void load_board(const char* filename, char board[9][9], bool communicate) {
 
-  cout << "Loading Sudoku board from file '" << filename << "'... ";
+  if (communicate)
+    cout << "Loading Sudoku board from file '" << filename << "'... ";
 
   ifstream in(filename);
-  if (!in)
+  if (!in && communicate)
     cout << "Failed!" << endl;
   assert(in);
 
@@ -33,7 +34,8 @@ void load_board(const char* filename, char board[9][9]) {
     in.getline(buffer,512);
   }
 
-  cout << ((row == 9) ? "Success!" : "Failed!") << endl;
+  if (communicate)
+    cout << ((row == 9) ? "Success!" : "Failed!") << endl;
   assert(row == 9);
 }
 
@@ -177,7 +179,7 @@ bool make_move(int row, int col, int value, char board[9][9])
 {
   char saved_board[9][9];
 
-  load_board(filename, saved_board); 
+  load_board(filename, saved_board, false); 
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
@@ -189,9 +191,6 @@ bool make_move(int row, int col, int value, char board[9][9])
 
   return true;
 }
-	      
-
-  
 
   
 /* function that writes a board array to a data file. returns true if write succesful otherwise returns false */
@@ -214,8 +213,11 @@ bool save_board(const char* filename, char board[9][9])
     }
 
   ostream.close(); 
-  
-  return true;
+
+  if (save_check(filename, board))
+    return true;
+  else
+    return false; 
 }
 
 /* function that solves the sudoku board using a backtracking approach. returns true if board is soluble, false otherwise */
