@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cassert>
 #include <ncurses.h>
+#include <unistd.h>
 #include "sudoku.h"
 
 using namespace std;
@@ -58,6 +59,10 @@ void print_row(const char* data, int row) {
 
 /* pre-supplied function to display a Sudoku board */
 void display_board(const char board[9][9]) {
+  clear(); 
+  printw("calls: "); 
+  printw("%d",function_call_cnt);
+  printw("\n"); 
   printw("    ");
   for (int r=0; r<9; r++) 
     {
@@ -70,7 +75,8 @@ void display_board(const char board[9][9]) {
     print_row(board[r],r);
   }
   print_frame(9);
-  refresh(); 
+  refresh();
+  usleep(2000); 
 }
 
 /* add your functions here */
