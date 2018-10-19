@@ -4,6 +4,8 @@
 
 using namespace std;
 
+int function_call_cnt = 0 ; 
+
 int main() {
 
   char board[9][9];
@@ -76,6 +78,35 @@ int main() {
 
   cout << "=================== Question 5 ===================" << endl << endl;
 
+  function_call_cnt = 0;
+  load_board("mystery1.dat", board); 
+  if (solve_board(board)) {
+    cout << "The 'mystery1' board has a solution:" << endl;
+    display_board(board);
+    cout << "Function calls required: " << function_call_cnt << endl; 
+  } else 
+    cout << "A solution cannot be found." << endl;
+  cout << endl;
+
+  function_call_cnt = 0;
+  load_board("mystery2.dat", board); 
+  if (solve_board(board)) {
+    cout << "The 'mystery2' board has a solution:" << endl;
+    display_board(board);
+    cout << "Function calls required: " << function_call_cnt << endl; 
+  } else 
+    cout << "A solution cannot be found." << endl;
+  cout << endl;
+
+  function_call_cnt = 0;
+  load_board("mystery3.dat", board); 
+  if (solve_board(board)) {
+    cout << "The 'mystery3' board has a solution:" << endl;
+    display_board(board);
+    cout << "Function calls required: " << function_call_cnt << endl; 
+  } else 
+    cout << "A solution cannot be found." << endl;
+  cout << endl;
 	// write more tests
 
   return 0;

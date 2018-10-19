@@ -173,6 +173,26 @@ bool make_move(int row, int col, int value, char board[9][9])
     return false;
 }
 
+/* function that checks whether a saved board object is the same as a board object in program memory */bool save_check(const char* filename, char board[9][9])
+{
+  char saved_board[9][9];
+
+  load_board(filename, saved_board); 
+  for (int row = 0; row < 9; row++)
+    {
+      for (int col = 0; col < 9; col++)
+	{
+	  if (!(board[row][col] == saved_board[row][col]))
+	    return false;
+	}
+    }
+
+  return true;
+}
+	      
+
+  
+
   
 /* function that writes a board array to a data file. returns true if write succesful otherwise returns false */
 bool save_board(const char* filename, char board[9][9])
@@ -198,7 +218,7 @@ bool save_board(const char* filename, char board[9][9])
   return true;
 }
 
-/* function that solves the sudoku board through an 'informed brute-force' strategy. returns true if board is soluble, false otherwise */
+/* function that solves the sudoku board using a backtracking approach. returns true if board is soluble, false otherwise */
 bool solve_board(char board[9][9])
 {
   function_call_cnt++; 
@@ -210,7 +230,6 @@ bool solve_board(char board[9][9])
 	    {
 	      for (int working_num = 1; working_num <= 9; working_num++)
 		{
-		  guess_cnt++;
 		  bool move_result = make_move(row, col, working_num, board); 
 		  
 		  if (is_complete(board))
