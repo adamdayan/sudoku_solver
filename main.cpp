@@ -1,8 +1,10 @@
 #include <iostream>
 #include <cstdio>
+#include <chrono>
 #include "sudoku.h"
 
-using namespace std;
+using namespace std; 
+using namespace std::chrono;
 
 int function_call_cnt = 0 ; 
 
@@ -78,32 +80,53 @@ int main() {
 
   cout << "=================== Question 5 ===================" << endl << endl;
 
+  
   function_call_cnt = 0;
   load_board("mystery1.dat", board); 
+
+  auto start = high_resolution_clock::now(); 
+  
   if (solve_board(board)) {
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start); 
     cout << "The 'mystery1' board has a solution:" << endl;
     display_board(board);
-    cout << "Function calls required: " << function_call_cnt << endl; 
-  } else 
+    cout << "Function calls required: " << function_call_cnt << endl
+	 << "Microseconds required: " << duration.count() << endl; 
+  } else
     cout << "A solution cannot be found." << endl;
   cout << endl;
 
   function_call_cnt = 0;
-  load_board("mystery2.dat", board); 
+  load_board("mystery2.dat", board);
+
+  start = high_resolution_clock::now(); 
+  
   if (solve_board(board)) {
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
     cout << "The 'mystery2' board has a solution:" << endl;
     display_board(board);
-    cout << "Function calls required: " << function_call_cnt << endl; 
+    cout << "Function calls required: " << function_call_cnt << endl
+	 << "Microseconds required: " << duration.count() << endl;
   } else 
     cout << "A solution cannot be found." << endl;
   cout << endl;
 
   function_call_cnt = 0;
-  load_board("mystery3.dat", board); 
+  load_board("mystery3.dat", board);
+
+  start = high_resolution_clock::now(); 
+  
   if (solve_board(board)) {
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
     cout << "The 'mystery3' board has a solution:" << endl;
     display_board(board);
-    cout << "Function calls required: " << function_call_cnt << endl; 
+
+    
+    cout << "Function calls required: " << function_call_cnt << endl
+	 << "Microseconds required: " << duration.count() << endl;
   } else 
     cout << "A solution cannot be found." << endl;
   cout << endl;

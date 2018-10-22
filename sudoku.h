@@ -29,7 +29,23 @@ bool make_move(const char* position, char digit, char board[9][9]);
 /* function that writes a board array to a data file. returns true if write successful otherwise returns false */ 
 bool save_board(const char* filename, char board[9][9]); 
 
+/* function that calculates the number of peers a cell has on its row. a peer is a cell that relates to the cell in question by occupying the same row, col or frame */
+int row_peers(char board[9][9], int cell_row, int cell_col);
+
+/* function that calculates the number of peers a cell has on its column */
+int col_peers(char board[9][9], int cell_row, int cell_col);
+
+/* function that calculates the number of peers a cell has in its frame */
+int frame_peers(char board[9][9], int cell_row, int cell_col);
+
+/* function that finds the empty cell on the board that currently has the most peers */ 
+void most_peers(char board[9][9], int& row, int& col); 
+
 /* function that solves the sudoku board through an 'informed brute-force' strategy. returns true if board is soluble, false otherwise */
 bool solve_board(char board[9][9]);
+
+bool solve_board2(char board[9][9]); 
+
+
 
 #endif

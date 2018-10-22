@@ -220,6 +220,83 @@ bool save_board(const char* filename, char board[9][9])
     return false; 
 }
 
+/* function that calculates the number of peers a cell has on its row. a peer is a cell that relates to the cell in question by occupying the same row, col or frame */
+int row_peers(char board[9][9], int cell_row, int cell_col)
+{
+  int cnt = 0;
+
+  for (int col = 0; col < 9; col++)
+    {
+      if (board[cell_row][col] != '.' && col != cell_col)
+	cnt++;
+    }
+
+  return cnt;
+}
+
+/* function that calculates the number of peers a cell has on its column */
+int col_peers(char board[9][9], int cell_row, int cell_col)
+{
+  int cnt = 0;
+
+  for (int row = 0; row < 9; row++)
+    {
+      if (board[row][cell_col] != '.' && row != cell_row)
+	cnt++;
+    }
+
+  return cnt;
+}
+
+/* function that calculates the number of peers a cell has in its frame */
+int frame_peers(char board[9][9], int cell_row, int cell_col)
+{
+  int row_lower_bound = (cell_row / 3) * 3;
+  int row_upper_bound = row_lower_bound + 2;
+  int col_lower_bound = (cell_col / 3) * 3;
+  int col_upper_bound = col_lower_bound + 2;
+  int cnt = 0; 
+  
+  for (int row_iterator = row_lower_bound; row_iterator <= row_upper_bound; row_iterator++)
+    {
+      for (int col_iterator = col_lower_bound; col_iterator <= col_upper_bound; col_iterator++)
+	{
+	  if (board[row_iterator][col_iterator] != '.' && row_iterator != cell_row && col_iterator != cell_col)
+	    cnt++; 
+	}
+    }
+
+  return cnt;
+}
+
+/* function that finds the empty cell on the board that currently has the most peers */ 
+void most_peers(char board[9][9], int& row, int& col)
+{
+  //char peer_board[9][9];
+  int max_peers = 0, max_peers_row = 0, max_peers_col = 0, peers = 0;
+
+  for (int row_iterator = 0; row_iterator < 9; row_iterator++)
+    {
+      for (int col_iterator = 0; col_iterator < 9; col_iterator++)
+	{
+	  if (board[row_iterator][col_iterator] == '.')
+	    {
+	      peers = row_peers(board, row_iterator, col_iterator) + col_peers(board, row_iterator, col_iterator);
+	      if (peers > max_peers)
+		{
+		  max_peers = peers;
+		  max_peers_row = row_iterator;
+		  max_peers_col = col_iterator;
+		}
+	    }
+	}
+    }
+
+  row = max_peers_row;
+  col = max_peers_col;
+}
+
+
 /* function that solves the sudoku board using a backtracking approach. returns true if board is soluble, false otherwise */
 bool solve_board(char board[9][9])
 {
@@ -256,6 +333,44 @@ bool solve_board(char board[9][9])
 		      return false; 
 		    }
 		}
+	    }
+	}
+    }
+}
+
+bool solve_board2(char board[9][9])
+{
+  int row, col; 
+  
+  function_call_cnt++; 
+  while (!is_complete(board))
+    {
+      most_peers(board, row, col); 
+      
+      for (int working_num = 1; working_num <= 9; working_num++)
+	{
+	  bool move_result = make_move(row, col, working_num, board); 
+		  
+	  if (is_complete(board))
+	    { 
+	      return true;
+	    }
+	  else if (move_result)
+	    {
+	      if (!solve_board(board) && working_num == 9)
+		{
+		  board[row][col] = '.';
+		  return false; 
+		}
+	      else if (is_complete(board))
+		return true; 
+	    }
+	  else if (working_num < 9)
+	    continue;
+	  else
+	    {
+	      board[row][col] = '.';
+	      return false; 
 	    }
 	}
     }
