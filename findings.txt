@@ -26,4 +26,8 @@ possible aswer I achieved further performance enhancements. mystery1
 now takes 819 calls and 2773 microseconds while mystery3 took 697
 calls and 2261 microseconds. None of this changes their difficulty
 ranking but the absolute differences between 1 and 3 have been reduced
-signifcantly by improved algorithims. 
+signifcantly by improved algorithims.
+
+References
+
+Wikipedia. 2018. Sudoku solving algorithims. [ONLINE] Available at: https://en.wikipedia.org/wiki/Sudoku_solving_algorithms#Backtracking. [Accessed 23 October 2018].
