@@ -7,6 +7,8 @@
 
 using namespace std;
 
+extern int function_call_cnt; 
+
 /* You are pre-supplied with the functions below. Add your own 
    function definitions to the end of this file. */
 

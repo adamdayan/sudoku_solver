@@ -1,7 +1,5 @@
 #ifndef SUDOKU_H
-#define SUDOKU_H
-
-extern int function_call_cnt; 
+#define SUDOKU_H 
 
 /* function to load board. default is to print statements on status of read but this can be specified */ 
 void load_board(const char* filename, char board[9][9], bool = true);
