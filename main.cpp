@@ -86,7 +86,7 @@ int main() {
 
   auto start = high_resolution_clock::now(); 
   
-  if (solve_board2(board)) {
+  if (solve_board(board)) {
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start); 
     cout << "The 'mystery1' board has a solution:" << endl;
@@ -102,7 +102,7 @@ int main() {
 
   start = high_resolution_clock::now(); 
   
-  if (solve_board2(board)) {
+  if (solve_board(board)) {
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     cout << "The 'mystery2' board has a solution:" << endl;
@@ -118,7 +118,7 @@ int main() {
 
   start = high_resolution_clock::now(); 
   
-  if (solve_board2(board)) {
+  if (solve_board(board)) {
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     cout << "The 'mystery3' board has a solution:" << endl;
@@ -130,7 +130,9 @@ int main() {
   } else 
     cout << "A solution cannot be found." << endl;
   cout << endl;
-	// write more tests
+
+
+  // write more tests
 
   return 0;
 }

@@ -296,53 +296,46 @@ void most_peers(char board[9][9], int& row, int& col)
   col = max_peers_col;
 }
 
-
-/* function that solves the sudoku board using a backtracking approach. returns true if board is soluble, false otherwise */
-bool solve_board(char board[9][9])
+/* helper function for solve_board that fills cells where there is only one possible move */ 
+void deductive_presolve(char board[9][9])
 {
-  function_call_cnt++; 
+  int solution_cnt, last_solution;
+
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
-	{ 
-	  if (board[row][col] == '.')
+	{
+	  solution_cnt = 0;
+	  last_solution = 0; 
+	  for (int working_num = 0; working_num < 10; working_num++)
 	    {
-	      for (int working_num = 1; working_num <= 9; working_num++)
+	      if (check_column(working_num, col, board)
+		  && check_row(working_num, row, board)
+		  && check_frame(working_num, row, col, board))
 		{
-		  bool move_result = make_move(row, col, working_num, board); 
-		  
-		  if (is_complete(board))
-		    { 
-		      return true;
-		    }
-		  else if (move_result)
-		    {
-		      if (!solve_board(board) && working_num == 9)
-			{
-			  board[row][col] = '.';
-			  return false; 
-			}
-		      else if (is_complete(board))
-			return true; 
-		    }
-		  else if (working_num < 9)
-		    continue;
-		  else
-		    {
-		      board[row][col] = '.';
-		      return false; 
-		    }
+		  solution_cnt++;
+		  last_solution = working_num;
 		}
 	    }
+
+	  if (solution_cnt == 1)
+	    board[row][col] = last_solution;
 	}
     }
 }
+	      
+  
 
-bool solve_board2(char board[9][9])
+/* improved function to solve board. fundamentally based on a backtrack algorithim but combines this with an optimisation that recursively calls the function on the cell with the most peers */ 
+bool solve_board(char board[9][9])
 {
   int row, col; 
   
-  function_call_cnt++; 
+  function_call_cnt++;
+
+  if (function_call_cnt == 1)
+    deductive_presolve(board); 
+  
   while (!is_complete(board))
     {
       most_peers(board, row, col); 

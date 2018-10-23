@@ -14,4 +14,16 @@ function calls and mystery3 requires 16459. This suggests that the
 Incrementing guesses from 1 will be highly ineffective when dealing
 with a small subset of all boards that contain high numbers in
 top-left-hand corner squares, particularly if these squares have few
-given peers.  
+given peers.
+
+After employing an optimisation that called the solve_board function
+on cells with the most filled-in peers first I achieved performance
+improvements. mystery1 was solved in 116233 calls and 154604
+microseconds; mystery2 took 4952 calls and 4072 microseconds. After
+further optimising by adding a helper function that, on the first
+'solve_board()' call, attempts to fill in any cells that have only one
+possible aswer I achieved further performance enhancements. mystery1
+now takes 819 calls and 2773 microseconds while mystery3 took 697
+calls and 2261 microseconds. None of this changes their difficulty
+ranking but the absolute differences between 1 and 3 have been reduced
+signifcantly by improved algorithims. 

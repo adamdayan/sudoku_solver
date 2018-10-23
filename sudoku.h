@@ -41,11 +41,11 @@ int frame_peers(char board[9][9], int cell_row, int cell_col);
 /* function that finds the empty cell on the board that currently has the most peers */ 
 void most_peers(char board[9][9], int& row, int& col); 
 
-/* function that solves the sudoku board through an 'informed brute-force' strategy. returns true if board is soluble, false otherwise */
+/* helper function for solve_board that fills cells where there is only one possible move */ 
+void deductive_presolve(char board[9][9]); 
+
+/* improved function to solve board. fundamentally based on a backtrack algorithim but combines this with an optimisation that recursively calls the function on the cell with the most peers */ 
 bool solve_board(char board[9][9]);
-
-bool solve_board2(char board[9][9]); 
-
 
 
 #endif
