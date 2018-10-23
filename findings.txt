@@ -3,8 +3,8 @@ Summarise your findings here (see specification).
 
 My initial implementation of the backtrack algorithim finds
 that mystery1 is substantially harder to solve than mystery3. Mystery1
-took 421546 calls to the 'solve_board()' function as compared to a
-mere 14133 for mystery3. Mystery2 is insoluble.
+took 421546 calls and 513687 microseconds to the 'solve_board()' function as compared to a
+mere 14133 calls and 10868 microseconds for mystery3. Mystery2 is insoluble.
 
 However, the finding that mystery1 is harder than mystery3 is a consequence of some relatively arbitrary features of
 my algorithim. If I alter 'solve_board()' to first guess 9 (rather than
