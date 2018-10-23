@@ -1,11 +1,11 @@
-sudoku: sudoku.o tests.o
-	g++ sudoku.o tests.o -o sudoku
+sudoku: sudoku.o main.o
+	g++ -std=c++14 sudoku.o tests.o -o sudoku
 
-tests.o: main.cpp sudoku.h
-	g++ -Wall -g -c main.cpp -o tests.o
+main.o: main.cpp sudoku.h
+	g++ -std=c++14 -Wall -g -c main.cpp
 
 sudoku.o: sudoku.cpp sudoku.h
-	  g++ -Wall -g -c sudoku.cpp -o sudoku.o
+	  g++ -std=c++14 -Wall -g -c sudoku.cpp
 
 clean:
 	rm -f *.o sudoku
