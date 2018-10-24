@@ -369,4 +369,5 @@ bool solve_board(char board[9][9])
 	    }
 	}
     }
+  return false; 
 }
