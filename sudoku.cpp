@@ -356,13 +356,13 @@ bool solve_board(char board[9][9], int presolve_flag)
 	{
 	  bool move_result = make_move(row, col, working_num, board); 
 
-	  // end function if board is complete
+	  // end function if board is complete. this should pop off every 'solve_board' from the stack
 	  if (is_complete(board))
 	    { 
 	      return true;
 	    }
 
-	  //if attempted legal move is legal recursively call 'solve_board' again 
+	  //if attempted move is legal, recursively call 'solve_board' again 
 	  else if (move_result)
 	    {
 	      // overwrite incorrect answer and return down the stack if no further numbers to try
