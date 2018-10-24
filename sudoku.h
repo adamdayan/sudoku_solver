@@ -43,7 +43,7 @@ void most_peers(char board[9][9], int& row, int& col);
 void deductive_presolve(char board[9][9]); 
 
 /* improved function to solve board. fundamentally based on a backtrack algorithim but combines this with an optimisation that recursively calls the function on the cell with the most peers */ 
-bool solve_board(char board[9][9]);
+bool solve_board(char board[9][9], int presolve_flag=1);
 
 
 #endif

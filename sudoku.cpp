@@ -5,9 +5,7 @@
 #include <cassert>
 #include "sudoku.h"
 
-using namespace std;
-
-extern int function_call_cnt; 
+using namespace std; 
 
 /* You are pre-supplied with the functions below. Add your own 
    function definitions to the end of this file. */
@@ -77,6 +75,7 @@ void display_board(const char board[9][9]) {
 /* function to check whether a sudoku board has all positions occupied with digits */
 bool is_complete(char board[9][9])
 {
+  // loop through each board cell and return false if it doesn't contain a digit
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
@@ -115,11 +114,13 @@ bool check_row(char digit, int row, char board[9][9])
 /* function to check whether a digit already exists in a square frame */
 bool check_frame(char digit, int row, int col, char board[9][9])
 {
+  // find coordinates that define frame that relates to the cell in question 
   int row_lower_bound = (row / 3) * 3;
   int row_upper_bound = row_lower_bound + 2;
   int col_lower_bound = (col / 3) * 3;
   int col_upper_bound = col_lower_bound + 2;
 
+  // loop through all cells in frame, if cell contents match digit then return false
   for (int row_count = row_lower_bound; row_count <= row_upper_bound; row_count++)
     {
       for (int col_count = col_lower_bound; col_count <= col_upper_bound; col_count++)
@@ -161,7 +162,7 @@ bool make_move(const char* position, char digit, char board[9][9])
     return false;
 }
 
-/* overloaded function to check whether a move is legal using indicies-to-write-to and digit-to-write; if so it will write that move to the board */ 
+/* overloaded helper version of the 'make_move' function to check whether a move is legal using indicies-to-write-to and digit-to-write; if so it will write that move to the board */ 
 bool make_move(int row, int col, int value, char board[9][9])
 {
   char digit = static_cast<char>(value) + '0'; 
@@ -182,6 +183,7 @@ bool make_move(int row, int col, int value, char board[9][9])
   char saved_board[9][9];
 
   load_board(filename, saved_board, false); 
+  // loop through each cell in both saved board and board in memory and return false if they don't match
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
@@ -202,6 +204,7 @@ bool save_board(const char* filename, char board[9][9])
 
   ostream.open(filename);
 
+  // loop through each cell on the board and write its contents to the out-stream. return false if the stream fails
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
@@ -222,7 +225,7 @@ bool save_board(const char* filename, char board[9][9])
     return false; 
 }
 
-/* function that calculates the number of peers a cell has on its row. a peer is a cell that relates to the cell in question by occupying the same row, col or frame */
+/* function that calculates the number of non-empty peers a cell has on its row. a peer is a cell that relates to the cell in question by occupying the same row, col or frame */
 int row_peers(char board[9][9], int cell_row, int cell_col)
 {
   int cnt = 0;
@@ -250,7 +253,7 @@ int col_peers(char board[9][9], int cell_row, int cell_col)
   return cnt;
 }
 
-/* function that calculates the number of peers a cell has in its frame */
+/* function that calculates and returns the number of non-empty peers a cell has in its frame. see comments for 'check_frame' function */
 int frame_peers(char board[9][9], int cell_row, int cell_col)
 {
   int row_lower_bound = (cell_row / 3) * 3;
@@ -274,19 +277,22 @@ int frame_peers(char board[9][9], int cell_row, int cell_col)
 /* function that finds the empty cell on the board that currently has the most peers */ 
 void most_peers(char board[9][9], int& row, int& col)
 {
-  //char peer_board[9][9];
   int max_peers = 0, max_peers_row = 0, max_peers_col = 0, peers = 0;
 
+  //loop through all cells on the board
   for (int row_iterator = 0; row_iterator < 9; row_iterator++)
     {
       for (int col_iterator = 0; col_iterator < 9; col_iterator++)
 	{
+	  //we only want to consider empty cells
 	  if (board[row_iterator][col_iterator] == '.')
 	    {
 	      peers = row_peers(board, row_iterator, col_iterator) + col_peers(board, row_iterator, col_iterator);
 	      if (peers > max_peers)
 		{
+		  // keeps track of the max number of non-empty peers encountered thus far 
 		  max_peers = peers;
+		  // stores the coordinates for cell with current max non-empty peers 
 		  max_peers_row = row_iterator;
 		  max_peers_col = col_iterator;
 		}
@@ -294,6 +300,7 @@ void most_peers(char board[9][9], int& row, int& col)
 	}
     }
 
+  //writes coordinates of final max non-empty peer cells to row and col reference parameters
   row = max_peers_row;
   col = max_peers_col;
 }
@@ -307,7 +314,9 @@ void deductive_presolve(char board[9][9])
     {
       for (int col = 0; col < 9; col++)
 	{
+	  // counts number of possible solutions for cell 
 	  solution_cnt = 0;
+	  // stores the most recent solution for a given cell 
 	  last_solution = 0; 
 	  for (int working_num = 0; working_num < 10; working_num++)
 	    {
@@ -319,7 +328,7 @@ void deductive_presolve(char board[9][9])
 		  last_solution = working_num;
 		}
 	    }
-
+	  // if only one possible solution for a given cell, write that solution to the cell 
 	  if (solution_cnt == 1)
 	    board[row][col] = last_solution;
 	}
@@ -328,31 +337,36 @@ void deductive_presolve(char board[9][9])
 	      
   
 
-/* improved function to solve board. fundamentally based on a backtrack algorithim but combines this with an optimisation that recursively calls the function on the cell with the most peers */ 
-bool solve_board(char board[9][9])
+/* improved function to solve board. fundamentally based on a backtrack algorithim but combines this with an optimisation that recursively calls the function on the cell with the most peers. the presolve_flag variable is used with default value to call the 'deductive_presolve' function on the first 'solve_board' call but not the subsequent recursive calls */ 
+bool solve_board(char board[9][9], int presolve_flag)
 {
   int row, col; 
-  
-  function_call_cnt++;
 
-  if (function_call_cnt == 1)
+  //call 'deductive presolve' on the first 'solve_board' call
+  if (presolve_flag == 1)
     deductive_presolve(board); 
-  
+
+  //loops through each empty cell in order of no. of non-empty peers
   while (!is_complete(board))
     {
       most_peers(board, row, col); 
-      
+
+      //loop through the possible cell answers, 1-9
       for (int working_num = 1; working_num <= 9; working_num++)
 	{
 	  bool move_result = make_move(row, col, working_num, board); 
-		  
+
+	  // end function if board is complete
 	  if (is_complete(board))
 	    { 
 	      return true;
 	    }
+
+	  //if attempted legal move is legal recursively call 'solve_board' again 
 	  else if (move_result)
 	    {
-	      if (!solve_board(board) && working_num == 9)
+	      // overwrite incorrect answer and return down the stack if no further numbers to try
+	      if (!solve_board(board, 0) && working_num == 9)
 		{
 		  board[row][col] = '.';
 		  return false; 
@@ -360,6 +374,8 @@ bool solve_board(char board[9][9])
 	      else if (is_complete(board))
 		return true; 
 	    }
+
+	  // if move attempt was illegal and there are still numbers to try, continue the loop 
 	  else if (working_num < 9)
 	    continue;
 	  else
