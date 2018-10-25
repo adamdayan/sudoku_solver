@@ -14,17 +14,25 @@ function calls and mystery3 requires 16459. This suggests that the
 Incrementing guesses from 1 will be highly ineffective when dealing
 with a small subset of all boards that contain high numbers in
 top-left-hand corner squares, particularly if these squares have few
-given peers.
+given peers. Similarly, the order you solve cells in can have
+significant ramifications. mystery1 has far more given cells near
+index (8,8) than it does near (0,0). 
 
 After employing an optimisation that called the solve_board function
 on cells with the most filled-in peers first I achieved performance
 improvements. mystery1 was solved in 116233 calls and 154604
-microseconds; mystery2 took 4952 calls and 4072 microseconds. After
+microseconds; mystery2 took 4952 calls and 4072 microseconds. By
+ordering on peers rather than arbitrarily starting in the top
+left-hand corner time taken to solve becomes more a function of
+board-difficulty rather than algorithmic choices. After
 further optimising by adding a helper function that, on the first
 'solve_board()' call, attempts to fill in any cells that have only one
 possible aswer I achieved further performance enhancements. mystery1
 now takes 819 calls and 2773 microseconds while mystery3 took 697
-calls and 2261 microseconds. None of this changes their difficulty
+calls and 2261 microseconds. Solving the cells with only 1 answer
+first attempts to mirror what a human might do and thus relates the
+'hardness' of a sudoku board as experienced by my program more closely
+to what a human would experience. None of this changes the 2 boards relative difficulty
 ranking but the absolute differences between 1 and 3 have been reduced
 signifcantly by improved algorithims.
 
