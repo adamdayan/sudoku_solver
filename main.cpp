@@ -1,7 +1,8 @@
+#include "sudoku.h"
 #include <iostream>
 #include <cstdio>
 #include <chrono>
-#include "sudoku.h"
+
 
 using namespace std;  
 

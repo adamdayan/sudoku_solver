@@ -32,7 +32,7 @@ now takes 819 calls and 2773 microseconds while mystery3 took 697
 calls and 2261 microseconds. Solving the cells with only 1 answer
 first attempts to mirror what a human might do and thus relates the
 'hardness' of a sudoku board as experienced by my program more closely
-to what a human would experience. None of this changes the 2 boards relative difficulty
+to what a human would experience. None of this changes the 2 board's relative difficulty
 ranking but the absolute differences between 1 and 3 have been reduced
 signifcantly by improved algorithims.
 
