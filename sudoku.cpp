@@ -1,9 +1,10 @@
+#include "sudoku.h"
 #include <iostream>
 #include <fstream>
 #include <cstdio>
 #include <cstring>
 #include <cassert>
-#include "sudoku.h"
+
 
 using namespace std; 
 
@@ -120,7 +121,7 @@ bool check_frame(char digit, int row, int col, char board[9][9])
   int col_lower_bound = (col / 3) * 3;
   int col_upper_bound = col_lower_bound + 2;
 
-  // loop through all cells in frame, if cell contents match digit then return false
+  /* loop through all cells in frame, if cell contents match digit then return false */ 
   for (int row_count = row_lower_bound; row_count <= row_upper_bound; row_count++)
     {
       for (int col_count = col_lower_bound; col_count <= col_upper_bound; col_count++)
@@ -148,7 +149,7 @@ bool make_move(const char* position, char digit, char board[9][9])
   int row, col;
 
   row = position[0] - 'A';
-  col = position[1] - 49; //-48 changes char to digit; -1 changes it to an index
+  col = position[1] - 49; /* -48 changes char to digit; -1 changes it to an index */
 
   if (check_column(digit, col, board)
       && check_row(digit, row, board)
@@ -183,7 +184,7 @@ bool make_move(int row, int col, int value, char board[9][9])
   char saved_board[9][9];
 
   load_board(filename, saved_board, false); 
-  // loop through each cell in both saved board and board in memory and return false if they don't match
+  /* loop through each cell in both saved board and board in memory and return false if they don't match */ 
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
@@ -204,7 +205,7 @@ bool save_board(const char* filename, char board[9][9])
 
   ostream.open(filename);
 
-  // loop through each cell on the board and write its contents to the out-stream. return false if the stream fails
+  /* loop through each cell on the board and write its contents to the out-stream. return false if the stream fails */ 
   for (int row = 0; row < 9; row++)
     {
       for (int col = 0; col < 9; col++)
@@ -279,7 +280,7 @@ void most_peers(char board[9][9], int& row, int& col)
 {
   int max_peers = 0, max_peers_row = 0, max_peers_col = 0, peers = 0;
 
-  //loop through all cells on the board
+  /* loop through all cells on the board */ 
   for (int row_iterator = 0; row_iterator < 9; row_iterator++)
     {
       for (int col_iterator = 0; col_iterator < 9; col_iterator++)
@@ -290,9 +291,9 @@ void most_peers(char board[9][9], int& row, int& col)
 	      peers = row_peers(board, row_iterator, col_iterator) + col_peers(board, row_iterator, col_iterator);
 	      if (peers > max_peers)
 		{
-		  // keeps track of the max number of non-empty peers encountered thus far 
+		  /* keeps track of the max number of non-empty peers encountered thus far */  
 		  max_peers = peers;
-		  // stores the coordinates for cell with current max non-empty peers 
+		  /* stores the coordinates for cell with current max non-empty peers */ 
 		  max_peers_row = row_iterator;
 		  max_peers_col = col_iterator;
 		}
@@ -300,7 +301,7 @@ void most_peers(char board[9][9], int& row, int& col)
 	}
     }
 
-  //writes coordinates of final max non-empty peer cells to row and col reference parameters
+  /* writes coordinates of final max non-empty peer cells to row and col reference parameters */ 
   row = max_peers_row;
   col = max_peers_col;
 }
@@ -314,9 +315,9 @@ void deductive_presolve(char board[9][9])
     {
       for (int col = 0; col < 9; col++)
 	{
-	  // counts number of possible solutions for cell 
+	  /* counts number of possible solutions for cell */ 
 	  solution_cnt = 0;
-	  // stores the most recent solution for a given cell 
+	  /* stores the most recent solution for a given cell */ 
 	  last_solution = 0; 
 	  for (int working_num = 0; working_num < 10; working_num++)
 	    {
@@ -328,7 +329,7 @@ void deductive_presolve(char board[9][9])
 		  last_solution = working_num;
 		}
 	    }
-	  // if only one possible solution for a given cell, write that solution to the cell 
+	  /* if only one possible solution for a given cell, write that solution to the cell */ 
 	  if (solution_cnt == 1)
 	    board[row][col] = last_solution;
 	}
@@ -342,30 +343,30 @@ bool solve_board(char board[9][9], int presolve_flag)
 {
   int row, col; 
 
-  //call 'deductive presolve' on the first 'solve_board' call
+  /* call 'deductive presolve' on the first 'solve_board' call */ 
   if (presolve_flag == 1)
     deductive_presolve(board); 
 
-  //loops through each empty cell in order of no. of non-empty peers
+  /* loops through each empty cell in order of no. of non-empty peers */ 
   while (!is_complete(board))
     {
       most_peers(board, row, col); 
 
-      //loop through the possible cell answers, 1-9
+      /* loop through the possible cell answers, 1-9 */ 
       for (int working_num = 1; working_num <= 9; working_num++)
 	{
 	  bool move_result = make_move(row, col, working_num, board); 
 
-	  // end function if board is complete. this should pop off every 'solve_board' from the stack
+	  /* end function if board is complete. this should pop off every 'solve_board' from the stack */ 
 	  if (is_complete(board))
 	    { 
 	      return true;
 	    }
 
-	  //if attempted move is legal, recursively call 'solve_board' again 
+	  /* if attempted move is legal, recursively call 'solve_board' again */ 
 	  else if (move_result)
 	    {
-	      // overwrite incorrect answer and return down the stack if no further numbers to try
+	      /* overwrite incorrect answer and return down the stack if no further numbers to try */ 
 	      if (!solve_board(board, 0) && working_num == 9)
 		{
 		  board[row][col] = '.';
@@ -375,7 +376,7 @@ bool solve_board(char board[9][9], int presolve_flag)
 		return true; 
 	    }
 
-	  // if move attempt was illegal and there are still numbers to try, continue the loop 
+	  /* if move attempt was illegal and there are still numbers to try, continue the loop */ 
 	  else if (working_num < 9)
 	    continue;
 	  else
